@@ -46,6 +46,7 @@ public class ElementsSet<E> extends HashSet<E> {
 #### Preguntas propuestas
 
 a) ¿Es el uso de la herencia adecuado para la implementación de la clase `ElementsSet`? ¿Qué salida muestra la función `System.out.println` al invocar el método `getNumberOfAddedElements`, 3 o 6?
+La función muestra 6.
 
 b) En el caso de que haya algún problema en la implementación anterior, proponga una solución alternativa usando composición/delegación que resuelva el problema.
 
