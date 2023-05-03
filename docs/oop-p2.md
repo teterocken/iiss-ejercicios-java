@@ -356,6 +356,10 @@ public class GroupOfUsers {
 #### `Main.java`
 
 ```java
+
+```
+
+```java
     ...
     GroupOfUsers group = new GroupOfUsers();
     List<ArrayList<String>> users = group.getUsers();
@@ -369,7 +373,94 @@ Responda a las siguientes cuestiones, teniendo en cuenta la lista de los 10 posi
 
 a) El software del ejercicio anterior ha evolucionado añadiendo nueva funcionalidad en su implementación. ¿Existe algún tipo de problema en esta versión de la implementación de los que se incluyen en la lista? ¿Es necesario aplicar refactoring en este caso? En el caso de que existan problemas, indique cuáles son y qué tipos de problemas piensa que generarían en el futuro si no se aplica el refactoring ahora.
 
+Vuelve a haber los mismos problemas que en la primera versión, pero además se suma uno mucho mayor, que es el de código duplicado. Este problema afectará al rendimiento del programa y lo hará menos legible, lo cual hará que el programa sea más difícil de reutilizar y menos flexible.
+
 b) En el caso de que la implementación necesite la aplicación de refactoring, realice los cambios oportunos e indique las mejoras que aporta su implementación respecto a la original.
+
+#### `GroupOfUsers.java`
+
+```java
+public class GroupOfUsers {
+    
+    private static HashMap<String, Integer> usersWithPoints_Group1 =
+      new HashMap<String, Integer>() {{
+        put("User1", 800);
+        put("User2", 550);
+        put("User3", 20);
+        put("User4", 300);
+    }};
+    
+    private static HashMap<String, Integer> usersWithPoints_Group2 =
+      new HashMap<String, Integer>() {{
+        put("User1", 10);
+        put("User2", 990);
+        put("User3", 760);
+        put("User4", 230);
+    }};
+    
+    private static HashMap<String, Integer> usersWithPoints_Group3 =
+      new HashMap<String, Integer>() {{
+        put("User1", 1000);
+        put("User2", 200);
+        put("User3", 5);
+        put("User4", 780);
+    }};
+
+    private List<String> sortUsers(HashMap<String, Integer> usersWithPoints)
+    {
+	List<String> users = new ArrayList<String>();
+        
+        usersWithPoints.entrySet()
+        .stream()
+        .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+        .forEachOrdered(x -> users.add(x.getKey()));
+	
+	return users;
+    }    
+
+    private List<String> capitalizeSortedUsers(HashMap<String, Integer> users) {
+        List<String> sortedUsers = sortUsers(users);
+        
+        List<String> usersCapitalized = new ArrayList<String>();
+        
+        sortedUsers.forEach(x -> usersCapitalized.add(x.toUpperCase()));
+        
+        return usersCapitalized;
+    }
+
+    public List<ArrayList<String>> getSortedUsers()
+    {
+        List<ArrayList<String>> users = new ArrayList<ArrayList<String>>();
+
+	List<String> users1 = capitalizeSortedUsers (usersWithPoints_Group1);
+	List<String> users2 = capitalizeSortedUsers (usersWithPoints_Group2);
+	List<String> users3 = capitalizeSortedUsers (usersWithPoints_Group3);
+
+	users.add((ArrayList<String>)users1);
+        users.add((ArrayList<String>)users2);
+        users.add((ArrayList<String>)users3);
+
+	return users;
+    }
+
+}
+```
+
+#### `Main.java`
+
+```java
+public class Main
+{
+    public static void main (String[] args)
+    {
+	GroupOfUsers group = new GroupOfUsers();
+    	List<ArrayList<String>> users = group.getSortedUsers();
+    	System.out.println("The users are: " + users);
+    }
+}
+```
+
+La clase GroupOfUsers tiene una mucho mayor cohesión, además el código es mucho más simple y legible, y permite una mucho mayor reutilización. Por ejemplo, antes si se hubiese añadido un cuarto grupo de usuarios hubiese habido que añadir 7 líneas de código en la función getUsers(), ahora solo son necesarias 2 en la función getSortedUsers.
 
 ## Referencias
 
