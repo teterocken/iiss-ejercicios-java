@@ -217,7 +217,66 @@ En la siguiente lista se incluyen 10 posibles problemas que pueden encontrarse e
 
 a) ¿Existe algún tipo de problema en la implementación anterior de los que se incluye en la lista anterior? ¿Es necesario aplicar refactoring en este caso? En el caso de que existan problemas, indique cuáles son y qué tipos de problemas piensa que generarían en el futuro si no se aplica el refactoring ahora.
 
+Hay una función que no especifica de manera clara su objetivo, ya que devuelve los usuarios ordenados por puntuación, cosa que el usuario no puede saber solo por el nombre de la función. Si no se aplicase refactoring aquí, podría haber problemas con respecto a la confusión de un usuario sobre el orden de aparición de estos usuarios con respecto al orden en que fueron insertados.
+
+Esta misma función tiene demasiada responsabilidad, pues tiene asignadas dos responsabilidades, ordenar los usuarios por puntuación, y pasar a mayúscula los nombres de los usuarios. El principal problema de esto es la falta de cohesión dentro de la función.
+
+Se utilizan comentarios para explicar código dificil de entender, esto puede complicar la reutilización del código.
+
 b) En el caso de que la implementación necesite la aplicación de refactoring, realice los cambios oportunos e indique las mejoras que aporta su implementación respecto a la original.
+
+#### `GroupOfUsers.java`
+
+```java
+public class GroupOfUsers {
+ 
+    private static Map<String, Integer> usersWithPoints =
+      new HashMap<String, Integer>() {{
+        put("User1", 800);
+        put("User2", 550);
+        put("User3", 20);
+        put("User4", 300);
+    }};
+
+    private List<String> sortedUsers()
+    {
+	List<String> users = new ArrayList<String>();
+        
+        usersWithPoints.entrySet()
+        .stream()
+        .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+        .forEachOrdered(x -> users.add(x.getKey()));
+	
+	return users;
+    }
+    
+    public List<String> getSortedUsers() 
+{
+        
+        List<String> usersCapitalized = new ArrayList<String>();
+        sortedUsers().forEach(x -> usersCapitalized.add(x.toUpperCase()));
+        
+        return usersCapitalized;
+ }
+
+}
+```
+
+#### `Main.java`
+
+```java
+public class Main
+{
+    public static void main (String[] args)
+    {
+	GroupOfUsers group = new GroupOfUsers();
+    	List<String> users = group.getSortedUsers();
+    	System.out.println ("The users are: " + users);
+    }
+}
+```
+
+Mi implementación mejora la cohesión dentro de la clase GroupOfUsers, y además facilita una posible reutilización del código.
 
 ### Ejercicio 2
 
