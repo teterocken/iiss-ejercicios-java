@@ -149,7 +149,7 @@ public class Product {
 }
 ```
 
-### `ShoppingCart.java`
+#### `ShoppingCart.java`
 
 ```java
 import java.util.HashMap;
@@ -236,14 +236,246 @@ a) En la clase `Product.java`:
 
 Además, añadir un mensaje de error descriptivo en cada una de las aserciones que se hayan implementado.
 
+#### `Product.java`
+
+```java
+public class Product {
+	
+	private int code;
+	private String name;
+	private String category;
+	private double weight;
+	private double height;
+	
+	public Product(int code, String name, String category, double weight, double height) {
+		assert code >= 0 : "code no puede ser un numero negativo";
+		this.code = code;
+		
+		assert !name.isEmpty() : "name no puede estar vacio";
+		assert name != null : "name no puede estar vacio";
+		this.name = name;
+		
+		assert !category.isEmpty() : "category no puede estar vacio";
+		assert category != null : "category no puede estar vacio";
+		this.category = category;
+		
+		assert weight >= 0 : "weight no puede ser un numero negativo";
+		this.weight = weight;
+		
+		assert height >= 0 : "height no puede ser un numero negativo";
+		this.height = height;
+	}
+	
+	public int getCode() {
+		return code;
+	}
+	
+	public void setName(String name) {
+		assert !name.isEmpty() : "name no puede estar vacio";
+		assert name != null : "name no puede estar vacio";
+		this.name = name;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public void setCategory(String category) {
+		assert !category.isEmpty() : "category no puede estar vacio";
+		assert category != null : "category no puede estar vacio";
+		this.category = category;
+	}
+	
+	public String getCategory() {
+		return this.category;
+	}
+	
+	public void setWeight(double weight) {
+		assert weight >= 0 : "weight no puede ser un numero negativo";
+		this.weight = weight;
+	}
+	
+	public double getWeight() {
+		return this.weight;
+	}
+	
+	public void setHeight(double height) {
+		assert height >= 0 : "height no puede ser un numero negativo";
+		this.height = height;
+	}
+	
+	public double getHeight() {
+		return this.height;
+	}
+}
+```
+
 b) En la clase `ShoppingCart.java`:
 
 - No se puede añadir un producto con un número de unidades negativo o nulo.
 - No se puede eliminar un producto que no existe en el carrito.
 
+#### `ShoppingCart.java`
+
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+public class ShoppingCart {
+	
+	Map<Product, Integer> shoppingCart;
+	
+	public ShoppingCart() {
+		shoppingCart = new HashMap<Product, Integer>();
+	}
+	
+	public void addProduct(Product product, int number) {
+		assert number > 0 : "No se puede añadir un producto con un número de unidades negativo o nulo.";
+		assert number != null : "No se puede añadir un producto con un número de unidades negativo o nulo.";
+		if(shoppingCart.keySet().stream().filter(element -> element.getCode() == product.getCode()).count() == 0) {
+			shoppingCart.put(product, number);
+		}
+	}
+	
+	public Product removeProduct(Product product) {
+		assert shoppingCart.containsKey(product) : "No se puede eliminar un producto que no existe en el carrito.";
+		shoppingCart.remove(product);
+		return product;
+	}
+	
+	public void printShoppingCartContent() {
+		System.out.println("The shopping cart content is: ");
+		
+		for(Product product: shoppingCart.keySet()) {
+			System.out.println(product.getCode() + " - " + product.getName() + " : " + shoppingCart.get(product));
+		}
+		
+	}
+}
+```
+
 ### Ejercicio 2
 
 Dado el código del primer ejercicio, ¿existe algún uso indebido del valor `null`?. En caso afirmativo, reemplazar su uso por el de la clase `Optional` en los casos en los que sea necesario.
+
+#### `Product.java`
+
+```java
+public class Product {
+	
+	private int code;
+	private String name;
+	private String category;
+	private double weight;
+	private double height;
+	
+	public Product(int code, String name, String category, double weight, double height) {
+		assert code >= 0 : "code no puede ser un numero negativo";
+		this.code = code;
+		
+		assert !name.isEmpty() : "name no puede estar vacio";
+		Optional<string> optionalName = name;
+		assert optionalName.isPresent() : "name no puede estar vacio";
+		this.name = name;
+		
+		assert !category.isEmpty() : "category no puede estar vacio";
+		Optional<string> optionalCategory = category;
+		assert optionalCategory.isPresent() : "category no puede estar vacio";
+		this.category = category;
+		
+		assert weight >= 0 : "weight no puede ser un numero negativo";
+		this.weight = weight;
+		
+		assert height >= 0 : "height no puede ser un numero negativo";
+		this.height = height;
+	}
+	
+	public int getCode() {
+		return code;
+	}
+	
+	public void setName(String name) {
+		assert !name.isEmpty() : "name no puede estar vacio";
+		Optional<string> optionalName = name;
+		assert optionalName.isPresent() : "name no puede estar vacio";
+		this.name = name;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public void setCategory(String category) {
+		assert !category.isEmpty() : "category no puede estar vacio";
+		Optional<string> optionalCategory = category;
+		assert optionalCategory.isPresent() : "category no puede estar vacio";
+		this.category = category;
+	}
+	
+	public String getCategory() {
+		return this.category;
+	}
+	
+	public void setWeight(double weight) {
+		assert weight >= 0 : "weight no puede ser un numero negativo";
+		this.weight = weight;
+	}
+	
+	public double getWeight() {
+		return this.weight;
+	}
+	
+	public void setHeight(double height) {
+		assert height >= 0 : "height no puede ser un numero negativo";
+		this.height = height;
+	}
+	
+	public double getHeight() {
+		return this.height;
+	}
+}
+```
+
+#### `ShoppingCart.java`
+
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+public class ShoppingCart {
+	
+	Map<Product, Integer> shoppingCart;
+	
+	public ShoppingCart() {
+		shoppingCart = new HashMap<Product, Integer>();
+	}
+	
+	public void addProduct(Product product, int number) {
+		assert number > 0 : "No se puede añadir un producto con un número de unidades negativo o nulo.";
+		Optional<int> optionalNumber = number;
+		assert optionalNumber.isPresent() : "No se puede añadir un producto con un número de unidades negativo o nulo.";
+		assert number != null : "No se puede añadir un producto con un número de unidades negativo o nulo.";
+		if(shoppingCart.keySet().stream().filter(element -> element.getCode() == product.getCode()).count() == 0) {
+			shoppingCart.put(product, number);
+		}
+	}
+	
+	public Product removeProduct(Product product) {
+		assert shoppingCart.containsKey(product) : "No se puede eliminar un producto que no existe en el carrito.";
+		shoppingCart.remove(product);
+		return product;
+	}
+	
+	public void printShoppingCartContent() {
+		System.out.println("The shopping cart content is: ");
+		
+		for(Product product: shoppingCart.keySet()) {
+			System.out.println(product.getCode() + " - " + product.getName() + " : " + shoppingCart.get(product));
+		}
+		
+	}
+}
+```
 
 ## Referencias
 
