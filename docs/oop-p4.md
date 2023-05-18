@@ -331,7 +331,6 @@ public class ShoppingCart {
 	
 	public void addProduct(Product product, int number) {
 		assert number > 0 : "No se puede añadir un producto con un número de unidades negativo o nulo.";
-		assert number != null : "No se puede añadir un producto con un número de unidades negativo o nulo.";
 		if(shoppingCart.keySet().stream().filter(element -> element.getCode() == product.getCode()).count() == 0) {
 			shoppingCart.put(product, number);
 		}
