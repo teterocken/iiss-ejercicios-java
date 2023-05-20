@@ -469,6 +469,134 @@ Basándose en el código del ejercicio anterior, implemente una API para una tie
 
 3. Implemente además un programa de prueba `Main` que ilustre el uso de las operaciones anteriores.
 
+#### `Videogame.java`
+```java
+public class Videogame 
+{
+    String titulo;
+    String categoria;
+    double precio;
+
+    public Videogame (String titulo, String categoria, double precio)
+    {
+        this.titulo = titulo;
+        this.categoria = categoria;
+        this.precio = precio;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+}
+```
+
+#### `VideogameDatabase.java`
+
+```java
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class VideogameDatabase 
+{
+    private static List<Videogame> videogames = Arrays.asList(
+            new Videogame("Silent Hill", "Terror", 30),
+            new Videogame("Los Sims 4", "Simulacion", 10),
+            new Videogame("Minecraft", "Sandbox", 20),
+            new Videogame("Pokemon Escarlata", "Aventura", 60),
+            new Videogame("Spore", "Simulacion", 15),
+            new Videogame("Outlast", "Terror", 25),
+            new Videogame("God Of War Ragnarok", "Aventura", 70),
+            new Videogame("God Of War", "Aventura", 40),
+            new Videogame("Pokemon Purpura", "Aventura", 60));
+
+    public static void showAllVideogamesTitles()
+    {
+        videogames.stream().map(Videogame::getTitulo).forEach(videogame->System.out.println(videogame));
+    }
+
+    public static void showAllVideogamesWithPriceOverTwentyTitles ()
+    {
+        videogames.stream().filter(videojuego->videojuego.precio > 20).map(Videogame::getTitulo).forEach(videogame->System.out.println(videogame));
+    }
+
+    public static void showAllVideogamesWithPriceOverTwentyTitlesOrderedByPriceAsc ()
+    {
+        videogames.stream().filter(videojuego->videojuego.precio > 20).sorted(Comparator.comparingDouble(Videogame::getPrecio)).map(Videogame::getTitulo).forEach(videogame->System.out.println(videogame));
+    }
+
+    public static void showAllVideogamesWithPriceOverTwentyTitlesOrderedByPriceDesc ()
+    {
+        videogames.stream().filter(videojuego->videojuego.precio > 20).sorted(Comparator.comparingDouble(Videogame::getPrecio).reversed()).map(Videogame::getTitulo).forEach(videogame->System.out.println(videogame));
+    }
+
+    public static void showNumberOfVideogamesInEachCategorie ()
+    {
+        videogames.stream().collect(Collectors.groupingBy(Videogame::getCategoria, Collectors.counting())).forEach((cat, cant) -> System.out.println("Categoria: " + cat + "\tCantidad: " + cant));
+    }
+
+    public static void showPricesSumInEachCategorie ()
+    {
+        videogames.stream().collect(Collectors.groupingBy(Videogame::getCategoria, Collectors.summingDouble(Videogame::getPrecio))).forEach((cat, sp) -> System.out.println("Categoria: " + cat + "\tSuma de precios: " + sp));
+    }
+
+    public static void showPricesSumInEachCategorieIfOverTwoHundred ()
+    {
+        videogames.stream().collect(Collectors.groupingBy(Videogame::getCategoria, Collectors.summingDouble(Videogame::getPrecio))).entrySet().stream().filter(videogame->videogame.getValue() > 200).forEach(list -> System.out.println("Categoria: " + list.getKey() + "\tSuma de precios: " + list.getValue()));
+    }
+}
+```
+
+#### `Main.java`
+
+```java
+public class Main {
+    public static void main(String args[]) {
+        System.out.println("Los titulos de todos los videojuegos son:");
+        VideogameDatabase.showAllVideogamesTitles();
+
+        System.out.println("\nLos titulos de todos los videojuegos con precio mayor a 20 son:");
+        VideogameDatabase.showAllVideogamesWithPriceOverTwentyTitles();
+
+        System.out.println("\nLos titulos de todos los videojuegos con precio mayor a 20 ordenados ascendentemente son:");
+        VideogameDatabase.showAllVideogamesWithPriceOverTwentyTitlesOrderedByPriceAsc();
+
+        System.out.println("\nLos titulos de todos los videojuegos con precio mayor a 20 ordenados descendentemente son:");
+        VideogameDatabase.showAllVideogamesWithPriceOverTwentyTitlesOrderedByPriceDesc();
+
+        System.out.println("\nCantidad de videojuegos por categoría:");
+        VideogameDatabase.showNumberOfVideogamesInEachCategorie();
+
+        System.out.println("\nSuma de los precios de los videojuegos por categoría:");
+        VideogameDatabase.showPricesSumInEachCategorie();
+
+        System.out.println("\nSuma de los precios de los videojuegos por categoría si el precio total es mas de 200:");
+        VideogameDatabase.showPricesSumInEachCategorieIfOverTwoHundred();
+    }
+}
+```
+
 ## Referencias
 
 [Java 8 Stream Tutorial]: https://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/
