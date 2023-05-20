@@ -362,6 +362,80 @@ public class Main {
     - Obtener el número de empleados que existen en la base de datos.
     - Obtener el número de empleados que existen en la base de datos y su nombre es igual a uno dado en la operación como parámetro.
 
+#### `EmployeeDatabase.java`
+
+```java
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class EmployeeDatabase {
+
+    private static List<Employee> employees = Arrays.asList(
+            new Employee("Employee1", 20),
+            new Employee("Employee2", 30),
+            new Employee("Employee3", 40),
+            new Employee("Employee4", 50));
+
+    public static Employee getEmployeeByName(String name) {
+        if (employees.stream().filter(empleado->empleado.getName() == name).findFirst().isPresent())
+        {
+            Employee result = employees.stream().filter(empleado->empleado.getName() == name).findFirst().get();
+            return result;
+        }
+        return null;
+       }
+
+    public static Employee getEmployeeByNameAndAge(String name, int age) {
+        if (employees.stream().filter(empleado->empleado.getName() == name).filter(empleado->empleado.getAge() == age).findFirst().isPresent())
+        {
+            Employee result = employees.stream().filter(empleado->empleado.getName() == name).filter(empleado->empleado.getAge() == age).findFirst().get();
+            return result;
+        }
+        return null;
+    }
+
+    public static List<Employee> getEmployeeByAgeOver(int limitAge) {
+        List<Employee> result = employees.stream().filter(empleado -> empleado.getAge() > limitAge).collect(Collectors.toList());
+        return result;
+    }
+
+    public static List<Employee> getEmployeeByAgeUnder(int limitAge) {
+        List<Employee> result = employees.stream().filter(empleado -> empleado.getAge() < limitAge).collect(Collectors.toList());
+        return result;
+    }
+
+    public static List<Employee> getEmployeeByAgeBetween(int lowerLimitAge, int higherLimitAge)
+    {
+        List<Employee> result = employees.stream().filter(empleado -> lowerLimitAge < empleado.getAge()).filter(empleado -> empleado.getAge() < higherLimitAge).collect(Collectors.toList());
+        return result;
+    }
+
+    public static List<Employee> getAllEmployeeOrderedByAgeAsc()
+    {
+        List<Employee> result = employees.stream().sorted(Comparator.comparingInt(Employee::getAge)).collect(Collectors.toList());
+        return result;
+    }
+
+    public static List<Employee> getAllEmployeeOrderedByAgeDesc()
+    {
+        List<Employee> result = employees.stream().sorted(Comparator.comparingInt(Employee::getAge).reversed()).collect(Collectors.toList());
+        return result;
+    }
+
+    public static Long numberOfEmployees()
+    {
+        return employees.stream().collect(Collectors.counting());
+    }
+
+    public static Long numberOfEmployeesNamed(String name)
+    {
+        return employees.stream().filter(empleado->empleado.name==name).collect(Collectors.counting());
+    }
+}
+```
+
 ### Ejercicio 2
 
 Basándose en el código del ejercicio anterior, implemente una API para una tienda de videojuegos, teniendo en cuenta lo siguiente:
