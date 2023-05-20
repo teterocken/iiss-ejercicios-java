@@ -190,6 +190,93 @@ public class Main {
 
 2. Añada un tercer cambio haciendo uso de cierres (*closures*) para realizar la ordenación aleatoria de los elementos, siguiendo el mismo enfoque aplicado con las clases `DataSorterAsc` y `DataSorterDesc` en el apartado anterior.
 
+#### `DataSorter.java`
+
+```java
+public interface DataSorter {
+    public String[] sort();
+}
+```
+
+#### `DataSorterAsc.java`
+
+```java
+import java.util.Arrays;
+
+public class DataSorterAsc implements DataSorter {
+    private String[] data;
+    public DataSorterAsc(String[] data)
+    {
+        this.data = data;
+    }
+    public String[] sort() {
+        Arrays.sort(data);
+        return data;
+    }
+}
+```
+
+#### `DataSorterDesc.java`
+
+```java
+import java.util.Arrays;
+import java.util.Collections;
+
+public class DataSorterDesc implements DataSorter {
+    private String[] data;
+    public DataSorterDesc(String[] data)
+    {
+        this.data = data;
+    }
+    public String[] sort() {
+        Arrays.sort(data, Collections.reverseOrder());
+        return data;
+    }
+}
+```
+
+#### `DataSorterRandom.java`
+
+```java
+import java.util.Arrays;
+import java.util.Collections;
+
+public class DataSorterRandom implements DataSorter {
+    private String[] data;
+    public DataSorterRandom(String[] data)
+    {
+        this.data = data;
+    }
+    public String[] sort() {
+        Collections.shuffle(Arrays.asList(data));
+        return data;
+    }
+}
+```
+
+#### `Main.java`
+
+```java
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String args[]) {
+        String [] data = {"H", "S", "I", "V", "E", "W", "M", "P", "L",  "C", "N", "K",
+                 "O", "A", "Q", "R", "J", "D", "G", "T", "U", "X", "B", "Y", "Z", "F"};
+        System.out.println("data = " + Arrays.toString(data));
+        DataSorter dataSorter = new DataSorterDesc(data);
+        dataSorter.sort();
+        System.out.println("data (desc) = " + Arrays.toString(data));
+        dataSorter = new DataSorterAsc(data);
+        dataSorter.sort();
+        System.out.println("data (asc) = " + Arrays.toString(data));
+        dataSorter = new DataSorterRandom(data);
+        dataSorter.sort();
+        System.out.println("data (rand) = " + Arrays.toString(data));
+    }
+}
+```
+
 ## Referencias
 
 [Java 8 Stream Tutorial]: https://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/
