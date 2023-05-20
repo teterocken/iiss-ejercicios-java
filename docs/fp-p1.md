@@ -69,6 +69,61 @@ public class Main {
 - Operación que multiplique todos los números de la lista por 10 e imprima el resultado.
 - Operación que devuelva el resultado de la suma de todos los números de la lista.
 
+#### `DataOperationsImpl.java`
+
+```java
+import java.util.function.*;
+import java.util.stream.Collectors;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Arrays;
+public class DataOperationsImpl implements DataOperations {
+    Function<int[], Void> print = (int[] data) -> {for(int element: data) System.out.print(element + ", "); System.out.println();
+    return null;
+    };
+
+    @Override
+    public void print(int[] data)
+    {
+        print.apply(data);
+    }
+
+    Function<int[], int[]> filterPairs = (int[] data) -> {List<Integer> lista = Arrays.stream(data).filter(n->n%2!=0).boxed().collect(Collectors.toList());
+        for (int element: data) if (element%2==0) lista.add(0);
+        return lista.stream().mapToInt(Integer::intValue).toArray();};
+        
+
+    @Override
+    public int[] filterPairs(int[] data) {
+        return filterPairs.apply(data);
+    }
+
+    Function<int[], int[]> orderDesc = (int[] data) -> {return Arrays.stream(data).boxed().sorted(Comparator.reverseOrder()).mapToInt(Integer::intValue).toArray();};
+
+    @Override
+    public int[] orderDesc(int[] data)
+    {
+        return orderDesc.apply(data);
+    }
+
+    Function<int[], Void> multiplyByTen = (int[] data) -> {print(Arrays.stream(data).map(n->n*10).toArray());
+        return null;
+    };
+
+    public void multiplyByTen(int[] data)
+    {
+        multiplyByTen.apply(data);
+    }
+
+    Function<int[], Integer> sumElements = (int[] data) -> {return Arrays.stream(data).sum();};
+
+    public int sumElements(int[] data)
+    {
+        return sumElements.apply(data);
+    }
+}
+```
+
 ### Ejercicio 2
 
 Dado los siguientes fragmentos de código que implementan un API cuya interfaz viene dada por `DataSorter`, responder a las siguientes preguntas.
