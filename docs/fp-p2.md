@@ -356,6 +356,87 @@ public class Main {
 
 2. Modifique el código de la clase `Main` para que el procesamiento se realice en paralelo y se obtenga el mismo resultado por consola que en el apartado anterior.
 
+#### `AsynchronousAPI.java`
+
+```java
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
+
+public class AsynchronousAPI {
+	
+	public static CompletableFuture<Integer> additionAsync(List<Integer> elements) throws InterruptedException {
+        CompletableFuture<Integer> completableFuture 
+	      = new CompletableFuture<>();
+	 
+	    Executors.newCachedThreadPool().submit( () -> {
+            Integer sum = 0;
+            for (Integer element: elements)
+            {
+                Thread.sleep(2000);
+                System.out.println("Adding " + element);
+                sum += element;
+            }
+            completableFuture.complete(sum);
+            return null;
+	    });
+	 
+	    return completableFuture;
+	}
+	
+	public static CompletableFuture<Integer> mutiplicationAsync(List<Integer> elements) throws InterruptedException {
+        CompletableFuture<Integer> completableFuture 
+	      = new CompletableFuture<>();
+	 
+	    Executors.newCachedThreadPool().submit( () -> {
+            Integer sum = 0;
+            Boolean primeraEntrada = false;
+            for (Integer element: elements)
+            {
+                Thread.sleep(3000);
+                System.out.println("Multiplying  " + element);
+                if (!primeraEntrada)
+                {
+                    sum += element;
+                    primeraEntrada = true;
+                }
+                sum *= element;
+            }
+            completableFuture.complete(sum);
+            return null;
+	    });
+	 
+	    return completableFuture;
+	}
+
+}
+```
+
+#### `Main.java`
+
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
+public class Main {
+	
+	public static void main(String args[]) throws InterruptedException, ExecutionException {
+		List<Integer> elements = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+		List<Integer> elements2 = Arrays.asList(11, 12, 13, 14, 15, 16, 17, 18, 19, 20);
+		CompletableFuture<Integer> completableFuture = AsynchronousAPI.additionAsync(elements);
+        CompletableFuture<Void> futureVoid = completableFuture.thenAccept(sum -> System.out.println("The result is " + sum));
+
+        CompletableFuture<Integer> completableFuture2 = AsynchronousAPI.mutiplicationAsync(elements2);
+        CompletableFuture<Void> futureVoid2 = completableFuture2.thenAccept(prod -> System.out.println("The result is " + prod));
+
+		CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(futureVoid, futureVoid2);
+        combinedFuture.get();
+	}
+}
+```
+
 ## Referencias
 
 [Guide to CompletableFuture]: https://www.baeldung.com/java-completablefuture
