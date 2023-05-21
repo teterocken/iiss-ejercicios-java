@@ -248,6 +248,55 @@ Complete las secciones TO-DO de las clases `AsynchronousAPI` y `Main`, teniendo 
 - El método `additionAsync` debe añadir un retardo de 5 segundos en la suma de cada elemento.
 - En la función `main` se debe mostrar en consola el resultado de la suma completa con el mensaje `The result is (result)`.
 
+#### `AsynchronousAPI.java`
+```java
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class AsynchronousAPI {
+	
+	public static Future<Integer> additionAsync(List<Integer> elements) throws InterruptedException {
+	    CompletableFuture<Integer> completableFuture 
+	      = new CompletableFuture<>();
+	 
+	    Executors.newCachedThreadPool().submit( () -> {
+            Integer sum = 0;
+            for (Integer element: elements)
+            {
+                Thread.sleep(5000);
+                System.out.println("Adding " + element);
+                sum += element;
+            }
+            completableFuture.complete(sum);
+            return null;
+	    });
+	 
+	    return completableFuture;
+	}
+}
+```
+
+#### `Main.java`
+
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
+public class Main {
+	
+	public static void main(String args[]) throws InterruptedException, ExecutionException {
+		List<Integer> elements = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+		Future<Integer> completableFuture = AsynchronousAPI.additionAsync(elements);
+		Integer result = completableFuture.get();
+		System.out.println("The result is " + result);
+	}
+}
+```
+
 
 ### Ejercicio 2
 
