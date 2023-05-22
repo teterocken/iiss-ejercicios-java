@@ -95,10 +95,18 @@ public class Main {
 #### Preguntas propuestas
 
 1. ¿Se realiza inyección de dependencias entre las clases anteriores? Si es así, identifique la clase inyectora, el servicio y el cliente.
-2. En el caso de que exista inyección de dependencias, además indique:
+
+Sí, la clase inyectora es Main, ya que ahí se configuran las dependencias, el servicio lo constituye las clases DBAccessA y DBAccessB, y el cliente, DBClient.
+
+3. En el caso de que exista inyección de dependencias, además indique:
 
 - El método de inyección que se realiza (constructor, propiedad o método).
+
+Es el constructor de la clase DBClient.
+
 - La/s línea/s donde se realiza la inyección de dependencias.
+
+Líneas 9 y 13 de Main.java
 
 
 ### Ejercicio 2
